@@ -46,7 +46,32 @@ const UPLOAD_PLACEHOLDER = {
 
 }
 
-var render_gallery = (photos) => {
+let get_orientation_from_exif = (exif) => {
+    let res;
+    switch (exif[274]) {
+        case 8:
+            res = 'rotate270';
+            break;
+        default:
+            res = '';
+    }
+    return res; 
+}
+
+let get_orientation = (photo) => {
+    console.log(photo.exif);
+    let exif = JSON.parse(photo.exif.replace(/&quot;/g, '"'));
+    try{
+        return get_orientation_from_exif(exif);
+
+    } catch(e) {
+        return '';
+    }
+    
+}
+
+let render_gallery = (photos) => {
+    
     allp = allp.concat(photos);
 
     let selected = d3.select('#gallery_body')
@@ -65,11 +90,12 @@ var render_gallery = (photos) => {
 
     content.append('figure')
         .append('img')
+        .attr('class', get_orientation)
         .attr('src', (p) => { return p.thumbnail })
         .attr('style', 'object-fit: cover;height:300px');
 
 
-    let ptext = content.append('dev')
+    let ptext = content.append('div')
         .attr('class', 'entry-content flex flex-column align-items-center justify-content-center');
 
     ptext.append('h3')

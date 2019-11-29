@@ -15,6 +15,7 @@
     console.log(exif);
     var exif_dict = JSON.parse(exif.replace(/&quot;/g, '"'));
     console.log(exif_dict);
+    let rotation = get_orientation_from_exif(exif_dict);
 </script>
 
 
@@ -39,7 +40,7 @@
             <div class="col-12">
                 <div class="featured-img">
                     <figure>
-                        <img src={{media_url}}{{photo.file}} alt="blog">
+                        <img src={{media_url}}{{photo.file}} alt="blog" id="image-content">
                     </figure>
                 </div>
                 <!-- .content-area -->
@@ -201,6 +202,8 @@
     try{
         document.getElementById("software").innerHTML = exif_dict[305];
     }catch(e){}
+
+    document.getElementById("image-content").classList.add(rotation);
     
     
     
