@@ -1,0 +1,141 @@
+{%extends "patent/base.html"%} {% load static %} {% block content %}
+<script src="{%static 'js/gallery/service.js'%}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Shuffle/5.2.1/shuffle.js"></script>
+<link rel="stylesheet" href="{% static 'css/gallery/gallery.css'%}">
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <ul class="breadcrumbs flex align-items-center">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>Upload</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        
+            <div class="col-12 col-lg-8">
+
+                <div class="featured-img">
+
+                    <figure>
+                        <img src="{% static 'images/xmcover.png' %}" alt="Preview" class="img-preview" width="100%">
+                    </figure>
+                </div>
+
+
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="tag-wrapper">
+                    <div class="tag-display" id="tag-display">
+                            <!--
+                               
+                            <div class="col tag-wrapper"><button type="button" class="btn btn-primary tag">Primary</button></div>
+                            <div class="col tag-wrapper"><button type="button" class="btn btn-secondary tag">Secondary</button></div>
+                            <div class="col tag-wrapper"><button type="button" class="btn btn-success tag">Success</button></div>
+                            <div class="col tag-wrapper"><button type="button" class="btn btn-danger tag">Danger</button></div>
+                            <div class="col tag-wrapper"><button type="button" class="btn btn-warning tag">Warning</button></div>
+                            <div class="col tag-wrapper"><button type="button" class="btn btn-info tag">Info</button></div>
+                            <div class="col tag-wrapper"><button type="button" class="btn btn-light tag">Light</button></div>
+                            
+                            <div class="col tag-wrapper"><button type="button" class="btn btn-dark tag">Dark</button></div>
+                            
+                            <div class="col my-sizer-element"> 
+
+                            </div> -->
+                    </div>
+                    <div class="tag-add">
+                            <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Tag" id="tag-add-input">
+                                    <div class="input-group-append" id="button-addon4">
+                                            <button class="btn btn-outline-secondary" type="button" id="tag-add-btn">Add</button>
+                                    </div>
+                                    
+                    
+                            </div>
+
+                    </div>
+                </div>
+                    
+            </div>
+        
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile02">
+                    <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose
+                        file</label>
+                </div>
+
+            </div>
+            <div class="input-group mb-3">
+
+                <input type="text" class="form-control" placeholder="Title" id="title">
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Author" id="author">
+
+            </div>
+            <div class="input-group mb-3">
+                <input type="password" class="form-control " placeholder="Password" id="password">
+
+            </div>
+            <div class="input-group mb-3">
+                <textarea type="text" class="form-control" placeholder="Summary" id="summary"></textarea>
+
+            </div>
+
+            <center>
+                <button type="button" class="btn btn-light" id="upload-submit">Upload</button>
+            </center>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $("#inputGroupFile02").change(() => {
+
+        var reader = new FileReader();
+        reader.onload = (e) => {
+            $(".img-preview").attr("src", e.target.result);
+
+        }
+        reader.readAsDataURL($("#inputGroupFile02").prop('files')[0]);
+
+    })
+
+    console.log(get_tag());
+
+    $("#tag-add-btn").on("click", ()=>{
+        add_tag(
+            $("#tag-add-input").val()
+        );
+        $("#tag-add-input").val('');
+    })
+
+    $("#upload-submit").on("click", ()=>{
+        let data = extract_form();
+        console.log(data);
+        upload(data);
+
+    })
+
+    $(document).on('click','.tag', ()=>{
+        remove_tag(event.target.innerHTML.toLowerCase());
+    })
+
+
+//window.shuffleInstance = new window.Shuffle(document.getElementById('tag-display'), {
+//  itemSelector: '.tag-wrapper',
+  //sizer: '.my-sizer-element',
+//});
+
+    
+</script>
+
+{%endblock%}

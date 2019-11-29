@@ -1,0 +1,70 @@
+{%extends "patent/base.html"%} {% load static %} {% block content %}
+<script src="{%static 'js/gallery/service.js'%}"></script>
+<script>
+
+    
+    var start = 0;
+    var number = 9;
+    var increment = 3;
+    var allp = [];
+    console.log(fetch_url);     
+</script>
+
+<!--
+
+<div class="col-12 col-md-6 col-lg-4" style="padding-top:50;padding-bottom:0;padding-left:20;padding-left:20">
+    <div class="portfolio-content">
+        <figure><img src="/media/gallery/Screenshot_from_2018-11-16_13-22-31_MvLHKy4.png" style="object-fit: cover;height:300px"></figure>
+        <dev class="entry-content flex flex-column align-items-center justify-content-center">
+            <h3><a href="#">asd</a></h3>
+            <ul class="flex flex-wrap justify-content-center">
+                <li><a href="/gallery/detail/41/">story</a></li>
+            </ul>
+        </dev>
+    </div>
+</div>
+-->
+
+<div class="outer-container  portfolio-page">
+
+    <div class="container portfolio-page">
+        <div class="row">
+            <div class="col">
+                <ul class="breadcrumbs flex align-items-center">
+                    <li>
+                        <a>Home</a>
+                    </li>
+                    <li>
+                        <a href="gallery/upload_page/">Upload</a>
+                    </li>
+
+                </ul>
+                <!-- .breadcrumbs -->
+            </div>
+            <!-- .col -->
+        </div>
+        <div class="row" id="gallery_body">
+
+            
+
+        </div><!-- .row -->
+        
+        
+        <br />
+        <div class='row'>
+            <div class="col">
+                <button id="load-more" type="button" class="btn btn-block btn-light">LOAD MORE</button>
+            </div>
+        </div>
+        <div class="row">
+            <br />
+        </div>
+
+    </div><!-- .container-fluid -->
+</div>
+<script>
+    fetch(true);
+    $("#load-more").on('click', () => {
+        fetch(false);
+    })
+</script> {%endblock%}

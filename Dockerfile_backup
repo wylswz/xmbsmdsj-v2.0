@@ -1,0 +1,50 @@
+FROM wylswz/mysite
+# Making working Directory as AlGoLib_bootcamp
+WORKDIR /patent
+
+# Add all files into AlgoLib_MVP
+ADD . /patent
+RUN ls
+RUN apt update && apt install -y apache2 apache2-dev
+RUN cat /etc/apache2/apache2.conf
+
+# Install all the dependencies
+RUN  apt-get install -y python3-pip python3-dev git libssl-dev \
+  && cd /usr/local/bin \
+  && ln -s /usr/bin/python3 python \
+  && pip3 install --upgrade pip
+
+
+RUN echo "LoadModule wsgi_module \"/patent/lib/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so\"" >> /etc/apache2/apache2.conf
+
+RUN echo "WSGIPythonHome \"/patent\"" >> /etc/apache2/apache2.conf
+
+
+RUN echo "WSGIDaemonProcess patent python-path=/patent"  >> /etc/apache2/apache2.conf
+
+RUN echo "WSGIProcessGroup patent"  >> /etc/apache2/apache2.conf
+RUN echo "WSGIScriptAlias / /patent/patent/wsgi.py"  >> /etc/apache2/apache2.conf
+
+RUN echo "Alias /media/ /patent/media/"  >> /etc/apache2/apache2.conf
+
+RUN echo "Alias /static/ /patent/staticfiles/"  >> /etc/apache2/apache2.conf
+RUN echo "    <Directory /patent/staticfiles>"  >> /etc/apache2/apache2.conf
+RUN echo "        Require all granted"  >> /etc/apache2/apache2.conf
+RUN echo "    </Directory>"  >> /etc/apache2/apache2.conf
+RUN echo "    <Directory /patent/media>"  >> /etc/apache2/apache2.conf
+RUN echo "        Require all granted"  >> /etc/apache2/apache2.conf
+RUN echo "    </Directory>"  >> /etc/apache2/apache2.conf
+
+
+RUN echo "<Directory /patent/patent>"  >> /etc/apache2/apache2.conf
+RUN echo "<Files wsgi.py>"  >> /etc/apache2/apache2.conf
+RUN echo "Require all granted"  >> /etc/apache2/apache2.conf
+RUN echo "</Files>"  >> /etc/apache2/apache2.conf
+RUN echo "</Directory>"  >> /etc/apache2/apache2.conf
+RUN cat /etc/apache2/apache2.conf
+
+
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+

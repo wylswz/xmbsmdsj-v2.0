@@ -1,0 +1,207 @@
+{%extends "patent/base.html"%} {% load static %} {% block content %}
+
+<div id="fb-root"></div>
+<script>(function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<script>
+    var exif = "{{photo.exif}}";
+    console.log(exif);
+    var exif_dict = JSON.parse(exif.replace(/&quot;/g, '"'));
+    console.log(exif_dict);
+</script>
+
+
+
+<div class="single-post">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <ul class="breadcrumbs flex align-items-center">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>Single</li>
+                </ul>
+                <!-- .breadcrumbs -->
+            </div>
+            <!-- .col -->
+        </div>
+        <!-- .row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="featured-img">
+                    <figure>
+                        <img src={{media_url}}{{photo.file}} alt="blog">
+                    </figure>
+                </div>
+                <!-- .content-area -->
+            </div>
+            <!-- .col -->
+
+            <div class="col-12 col-lg-8">
+                <div class="content-area">
+                    <header class="entry-header">
+                        <div class="post-meta">
+                            <a href="#">Story</a>
+                        </div>
+                        <!-- .meta-post -->
+
+                        <h1>{{photo.title}}</h1>
+
+                        <span class="byline">by
+                            <span class="author">
+                                <a href="#">{{photo.author}}</a>
+                            </span>
+                        </span>
+                    </header>
+                    <!-- .entry-header -->
+
+                    <div class="entry-content">
+                        <p>
+                            {{photo.summary}}
+                        </p>
+                    </div>
+                    <!-- .entry-content -->
+                </div>
+                <!-- .content-area -->
+            </div>
+            <!-- .col-12 -->
+
+            <aside class="col-12 col-lg-3 offset-lg-1">
+                <div class="entry-meta">
+                    <div class="posted-date">
+                        <label>Date</label>
+
+                        <span class="date-format">
+                            <a href="#">{{photo.uploaded_at}}</a>
+                        </span>
+                    </div>
+                    <!-- .posted-date -->
+                    <div class="post-category">
+                        <label>
+                            Camera
+                        </label>
+                        <span>
+                            <a id="camera">
+
+                            </a>
+                        </span>
+                    </div>
+                    <div class="post-category">
+                        <label>
+                            Aperture
+                        </label>
+                        <span>
+                            <a id="aperture">
+
+                            </a>
+                        </span>
+                    </div>
+
+                    <div class="post-category">
+                        <label>
+                            ISO
+                        </label>
+                        <span>
+                            <a id="ISO">
+
+                            </a>
+                        </span>
+                    </div>
+
+                    <div class="post-category">
+                        <label>
+                            Exposure
+                        </label>
+                        <span>
+                            <a id="exposure">
+
+                            </a>
+                        </span>
+                    </div>
+
+                    <div class="post-category">
+                            <label>
+                                Software
+                            </label>
+                            <span>
+                                <a id="software">
+    
+                                </a>
+                            </span>
+                        </div>
+
+                    <div class="post-category">
+                        <label>Category</label>
+                        <span>
+                            <a>Photography</a>
+                        </span>
+                    </div>
+                    <!-- .post-category -->
+
+                    <div class="posted-tags">
+                        <label>tags</label>
+                        <span>{% for t in tags%}
+                            <a href="#">{{t}}</a> {%endfor%}</span>
+                    </div>
+                    <!-- .entry-meta -->
+
+                    <div class="post-share">
+                        <label>share</label>
+                        <ul>
+                            <li class="fb">
+                                
+                                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.xmbsmdsj.com%2Fgallery%2Fdetail%2F{{photo.id}}%2F&amp;src=sdkpreparse"
+                                        class="fb-xfbml-parse-ignore">
+                                        <i class="fa fa-facebook"></i>
+                                    </a>
+                                
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- .post-share -->
+                </div>
+                <!-- .entry-meta -->
+            </aside>
+            <!-- .col-md-3 -->
+
+
+        </div>
+        <!-- .row -->
+    </div>
+    <!-- .container -->
+</div>
+<!-- .single-post -->
+<script>
+    var ru = (s) => {
+        return s==undefined?'':s;
+
+    }
+
+    try{
+        document.getElementById("camera").innerHTML = ru(exif_dict[271]) + ' ' + ru(exif_dict[272]) + ' ' + ru(exif_dict[42036]);
+    }catch(e){}
+    try{
+        document.getElementById("aperture").innerHTML = 'f' + Math.round(exif_dict[37378][0] / exif_dict[37378][1] * 10) / 10;
+    }catch(e){}
+    try{
+        document.getElementById("ISO").innerHTML = exif_dict[34855];
+    }catch(e){}
+    try{
+        document.getElementById("exposure").innerHTML = exif_dict[33434];
+    }catch(e){}
+    try{
+        document.getElementById("software").innerHTML = exif_dict[305];
+    }catch(e){}
+    
+    
+    
+</script> {%endblock%}

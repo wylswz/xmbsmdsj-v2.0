@@ -1,0 +1,76 @@
+{%extends "patent/base.html"%}
+{% load static %}
+
+{% block content %}
+<script src="{%static 'js/blog/service.js'%}"></script>
+<script>
+var blog_fetch_url = "{%url 'blog:fetch'%}";
+var start = 0;
+var number = 9;
+var increment=3;
+var allb = [];
+</script>
+    <div class="outer-container blog-page">
+    <div class="container portfolio-page">
+
+            <div class="row">
+                    <div class="col">
+                        <ul class="breadcrumbs flex align-items-center">
+                            <li>
+                                <a href="/">Home</a>
+                            </li>
+                            <li>
+                                <a>Blog</a>
+                            </li>
+                        </ul>
+                        <!-- .breadcrumbs -->
+                    </div>
+                    <!-- .col -->
+                </div>
+        <div class="row" id="blog-listing">
+
+
+            <!--div class="col-12 col-xl-6 no-padding">
+                <div class="blog-content flex">
+                    <figure>
+                        <a href="#"><img src="images/11.jpg" alt=""></a>
+                    </figure>
+
+                    <div class="entry-content flex flex-column justify-content-between align-items-start">
+                        <header>
+                            <h3><a href="#">Portfolio Single Post Builder</a></h3>
+
+                            <div class="posted-by">Phil Martinez</div>
+                        </header>
+
+                        <footer class="flex flex-wrap align-items-center">
+                            <div class="posted-on">December 20, 2018</div>
+
+                            <ul class="flex flex-wrap align-items-center">
+                                <li><a href="#">Portfolio,</a></li>
+                                <li><a href="#">Tree</a></li>
+                            </ul>
+                        </footer>
+                    </div>
+                </div>
+            </div-->
+
+            <!--A single cell of blog-->
+
+        </div><!-- .row -->
+        <br/>
+        <div class="row">
+            <div class="col">
+                <button id="load-more-blogs" type="button" class="btn btn-block btn-light">LOAD MORE</button>
+            </div>
+
+        </div>
+    </div><!-- .container-fluid -->
+</div><!-- .outer-container -->
+<script>
+        fetch(true);
+    $("#load-more-blogs").on('click',()=>{
+        fetch(false);
+    })
+    </script>
+{% endblock %}
