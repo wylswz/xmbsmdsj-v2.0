@@ -164,7 +164,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://stackoverflow.com/questions/48727193/error-404-static-files-in-django-2-0
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
+GALLERY_META = os.path.join(MEDIA_ROOT, 'gallery', 'metadata.json')
 
 print(STATIC_ROOT)
 

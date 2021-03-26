@@ -1,107 +1,76 @@
-from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
+import os
+import json
+
+
+from PIL import Image
+from pydantic import BaseModel, BaseConfig
+from typing import List
+
+from .utils import remove_bytes
 
 from patent.settings import MEDIA_ROOT, MEDIA_URL
-from functools import reduce
-# Create your models here.
-from PIL import Image as Img
-import io as StringIO
-import ast,traceback
-import os
 
-from rest_framework.serializers import SerializerMethodField
-from rest_framework import serializers
-
-class Photo(models.Model):
-
-    def content_file_name(instance, filename):
-        return 'gallery/' + filename
-
-    title = models.CharField(max_length=400,null=False,default="UNKNOWN")
-    summary = models.TextField(max_length=4000,null=True)
-    file = models.FileField(upload_to=content_file_name, null=False)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    exif = models.CharField(max_length=4000,default='')
-    # tags = TaggableManager()
-    author = models.CharField(max_length=400,default='Y WEN')
-    views = models.IntegerField(default=0)
-
-    def add_tags(self,tagstr):
-        '''
-        input
-        @ tagstr: comma separated tags
-        '''
-        try:
-            if tagstr is not None:
-                tags = [a.lower() for a in tagstr.split(',')]
-                print(tags)
-                self.tags.set(*tags,clear=True)
-                self.save()
-        except Exception as e:
-            traceback.print_exc()
-        pass
-    
-    def get_tags(self):
-        return self.tags.names()
-
-    def get_thumbnail_path(self):
-        split_name = str(self.file).split('.')
-        thumbnail_name = MEDIA_ROOT + '/' + reduce(lambda x,y : x + y, split_name[:-1]) + '_thumbnail' + '.' +split_name[-1]
-        thumbnail_dir = MEDIA_ROOT 
-        thumbnail_url = MEDIA_URL + '/' + reduce(lambda x,y : x + y, split_name[:-1]) + '_thumbnail' + '.' +split_name[-1]
-        if not os.path.isdir(thumbnail_dir):
-            os.mkdir(thumbnail_dir)
-        if not os.path.isfile(thumbnail_name):
-            i = Img.open(self.file)
-            i.thumbnail([i.size[0]/3, i.size[1]/3])
-            i.save(thumbnail_name)
-        return thumbnail_url
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        ordering = ("-uploaded_at",)
+_THUMB_NAIL_SUFFIX = '_thumbnail'
 
 
+class Photo(BaseModel):
+    id: int
+    title: str
+    summary: str
+    file: str
+    tags: List[str]
+    thumbnail: str
+    author: str
 
 
-class PhotoSerializer(serializers.ModelSerializer):
-    tags = SerializerMethodField('tag_field')
-    thumbnail = SerializerMethodField('thumbnail_field')
+    @property
+    def thumbnail_url(self):
+        return os.path.join(MEDIA_URL, self.thumbnail)
 
-    def tag_field(self,foo):
-        return foo.get_tags()
+    @property
+    def thumbnail_path(self):
+        return os.path.join(MEDIA_ROOT, self.thumbnail)
 
-    def exif_field(self,foo):
-        try:
-            i = Img.open(MEDIA_ROOT + '/' + str(foo.file))
-            exif = i._getexif()
-            print(exif)
-        except:
-            traceback.print_exc()
-    
-    
+    @property
+    def file_url(self):
+        return os.path.join(MEDIA_URL, self.file)
 
-    def thumbnail_field(self,foo):
-        try:
-            tp = foo.get_thumbnail_path()
-            return tp
-        except Exception as e:
-            traceback.print_exc()
-            return '' 
+    @property
+    def file_path(self):
+        return os.path.join(MEDIA_ROOT, self.file)
+
+    @property
+    def exif(self):
+        i = Image.open(self.file_path)
+        _exif = i._getexif()
+        print("Exif: ", _exif)
+        if _exif is None:
+            return "{1:\"asd\"}"
+        exif = dict(_exif.items())
+        remove_bytes(exif)
+        return json.dumps(exif)
+
+    def file_to_thumbnail(self):
+        splitted = self.file_path.split('.')
+        return '.'.join(splitted[:-1]) + _THUMB_NAIL_SUFFIX + '.' + splitted[-1]
+
+    def serialize(self):
+        d = self.dict()
+        d.update(
+            {
+                'thumbnail_url': self.thumbnail_url,
+                'file_url': self.file_url,
+                'exif': self.exif
+            }
+        )
+        return d
 
 
-    class Meta:
-        model = Photo
-        fields = "__all__"
-    
-    
-
-
-
-@receiver(post_delete, sender=Photo)
-def submission_delete(sender, instance, **kwargs):
-    instance.file.delete(False)
-    
+def read_image_meta(file: str) -> 'List[Photo]':
+    res = []
+    with open(file) as fp:
+        img_dicts = json.load(fp)
+        res = [
+            Photo(**i) for i in img_dicts
+        ]
+    return res

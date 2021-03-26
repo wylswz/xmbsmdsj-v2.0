@@ -91,7 +91,7 @@ let render_gallery = (photos) => {
     content.append('figure')
         .append('img')
         .attr('class', get_orientation)
-        .attr('src', (p) => { return p.thumbnail })
+        .attr('src', (p) => { return p.thumbnail_url })
         .attr('style', 'object-fit: cover;height:300px');
 
 
@@ -130,15 +130,10 @@ var fetch = (init_fetch) => {
         }
     }).done(
         (data) => {
-            if (data.status == 'success') {
-                $('#load-more').prop('disabled', true)
-                start += data.photos.length;
-                render_gallery(data.photos)
-                $('#load-more').prop('disabled', false)
-            } else {
-                console.log(data.message);
-                $('#load-more').prop('disabled', false)
-            }
+            $('#load-more').prop('disabled', true)
+            start += data.photos.length;
+            render_gallery(data.photos)
+            $('#load-more').prop('disabled', false)
         }
     );
 

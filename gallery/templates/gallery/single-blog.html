@@ -12,7 +12,7 @@
 
 <script>
     var exif = "{{photo.exif}}";
-    console.log(exif);
+    console.log(exif.replace(/&quot;/g, '"'));
     var exif_dict = JSON.parse(exif.replace(/&quot;/g, '"'));
     console.log(exif_dict);
     let rotation = get_orientation_from_exif(exif_dict);
@@ -40,7 +40,7 @@
             <div class="col-12">
                 <div class="featured-img">
                     <figure>
-                        <img src={{media_url}}{{photo.file}} alt="blog" id="image-content">
+                        <img src={{photo.file_url}} alt="blog" id="image-content">
                     </figure>
                 </div>
                 <!-- .content-area -->
