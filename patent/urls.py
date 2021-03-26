@@ -22,10 +22,8 @@ from . import settings
 
 urlpatterns = [
     url(r'^$',views.index,name='index'),
-    url(r'^admin/', admin.site.urls),
-    url(r'^gallery/', include('gallery.urls',namespace='gallery')),
+    url(r'^gallery/', include(('gallery.urls', 'gallery'), namespace='gallery')),
     url(r'^about/', views.about,name='about'),
-    url(r'^blog/',include('blog.urls',namespace='blog')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)\
 +static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

@@ -12,7 +12,6 @@ from utils.utils import token_auth,image_compress
 
 
 
-
 def detail(request,pid):
     context = {}
     try:
@@ -27,67 +26,6 @@ def detail(request,pid):
     return render(request,'gallery/single-blog.html',context=context)
 
 
-@ensure_csrf_cookie
-def upload_page(request):
-    return render(request, 'gallery/photo-upload.html')
-
-
-@api_view(['POST'])
-@token_auth
-def upload(request):
-    try:
-        file = request.FILES.get("file")
-        title = request.POST.get("title")
-        summary = request.POST.get("summary")
-        tags = str(request.POST.get("tags"))
-        author = str(request.POST.get("author"))
-
-        if file is None:
-            return Response({"status":"error", "message":"Image file cannot be empty"})
-
-        photo = Photo()
-        photo.summary = summary
-        photo.file = file
-        photo.title = title
-        if author is not None:
-            photo.author = author
-        photo.save()
-        photo.add_tags(tags)
-        exif = image_compress(MEDIA_ROOT + '/' + str(photo.file),MEDIA_ROOT + '/' + str(photo.file))
-        photo.exif = exif
-        photo.save()
-        return Response({"status": "success"})
-    except Exception as e:
-        traceback.print_exc()
-        return Response({"status": "error"})
-
-@api_view(["POST"])
-@token_auth
-def delete(request):
-    try:
-        id = request.POST.get("id")
-        Photo.objects.filter(id=int(id)).delete()
-        return Response({"status": "success"})
-    except Exception as e:
-        return Response({"status": "error","message":str(e)})
-
-
-@api_view(["POST"])
-@token_auth
-def edit(request):
-    try:
-        id = request.POST.get("id")
-        tags = str(request.POST.get("tags"))
-        new_title = request.POST.get("title")
-        new_summary = request.POST.get("summary")
-        photo = Photo.objects.get(id=int(id))
-        photo.title = new_title
-        photo.summary = new_summary
-        photo.save()
-        photo.add_tags(tags)
-        return Response({"status": "success"})
-    except Exception as e:
-        return Response({"status": "error","message":str(e)})
 
 @api_view(["POST"])
 def fetch(request):

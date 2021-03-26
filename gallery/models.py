@@ -10,9 +10,8 @@ import io as StringIO
 import ast,traceback
 import os
 
-from rest_framework.serializers import Serializer,SerializerMethodField
+from rest_framework.serializers import SerializerMethodField
 from rest_framework import serializers
-from taggit.managers import TaggableManager
 
 class Photo(models.Model):
 
@@ -24,7 +23,7 @@ class Photo(models.Model):
     file = models.FileField(upload_to=content_file_name, null=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     exif = models.CharField(max_length=4000,default='')
-    tags = TaggableManager()
+    # tags = TaggableManager()
     author = models.CharField(max_length=400,default='Y WEN')
     views = models.IntegerField(default=0)
 
