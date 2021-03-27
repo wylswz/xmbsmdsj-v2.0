@@ -18,7 +18,7 @@ _THUMB_NAIL_SUFFIX = '_thumbnail'
 _APERTURE = 0x9202
 _EXPOSURE = 0x829A
 
-_ISO = 0x8824
+_ISO = 0x8832
 _MODEL = 0x0110
 _SOFTWARE = 0x0131
 _SHUTTER = 0x9201
@@ -83,7 +83,7 @@ class Photo(BaseModel):
 
     @property
     def ISO(self):
-        return self._exif_raw().get(_ISO, 100)
+        return self._exif_raw().get(_ISO, 200)
 
     @property
     def software(self):
