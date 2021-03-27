@@ -11,11 +11,10 @@
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 <script>
-    var exif = "{{photo.exif}}";
-    console.log(exif.replace(/&quot;/g, '"'));
-    var exif_dict = JSON.parse(exif.replace(/&quot;/g, '"'));
-    console.log(exif_dict);
-    let rotation = get_orientation_from_exif(exif_dict);
+    let photo = {{photo}}
+    let rotation = get_orientation(
+        photo
+    );
 </script>
 
 
@@ -188,19 +187,19 @@
     }
 
     try{
-        document.getElementById("camera").innerHTML = ru(exif_dict[271]) + ' ' + ru(exif_dict[272]) + ' ' + ru(exif_dict[42036]);
+        document.getElementById("camera").innerHTML = photo.camera;
     }catch(e){}
     try{
-        document.getElementById("aperture").innerHTML = 'f' + Math.round(exif_dict[37378][0] / exif_dict[37378][1] * 10) / 10;
+        document.getElementById("aperture").innerHTML = 'f' + photo.aperture;
     }catch(e){}
     try{
-        document.getElementById("ISO").innerHTML = exif_dict[34855];
+        document.getElementById("ISO").innerHTML = photo.ISO;
     }catch(e){}
     try{
-        document.getElementById("exposure").innerHTML = exif_dict[33434];
+        document.getElementById("exposure").innerHTML = photo.exposure;
     }catch(e){}
     try{
-        document.getElementById("software").innerHTML = exif_dict[305];
+        document.getElementById("software").innerHTML = photo.software;
     }catch(e){}
 
     document.getElementById("image-content").classList.add(rotation);

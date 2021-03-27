@@ -46,28 +46,8 @@ const UPLOAD_PLACEHOLDER = {
 
 }
 
-let get_orientation_from_exif = (exif) => {
-    let res;
-    switch (exif[274]) {
-        case 8:
-            res = 'rotate270';
-            break;
-        default:
-            res = '';
-    }
-    return res; 
-}
-
 let get_orientation = (photo) => {
-    console.log(photo.exif);
-    let exif = JSON.parse(photo.exif.replace(/&quot;/g, '"'));
-    try{
-        return get_orientation_from_exif(exif);
-
-    } catch(e) {
-        return '';
-    }
-    
+    return photo.orientation    
 }
 
 let render_gallery = (photos) => {
