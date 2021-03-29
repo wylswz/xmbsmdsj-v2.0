@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import ensure_csrf_cookie,requires_csrf_token
 from .models import Photo
 from .services import ImageService
@@ -21,6 +22,7 @@ def detail(request, pid):
         for meta in image_metas:
             if meta.id == int(pid):
                 context['photo'] = meta.serialize()
+                context['photoStr'] = json.dumps(meta.serialize())
                 context['tags'] = meta.tags
 
     except Exception as e:

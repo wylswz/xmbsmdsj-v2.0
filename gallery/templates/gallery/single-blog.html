@@ -1,5 +1,4 @@
 {%extends "patent/base.html"%} {% load static %} {% block content %}
-
 <div id="fb-root"></div>
 <script>(function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
@@ -10,14 +9,9 @@
     }(document, 'script', 'facebook-jssdk'));</script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
-<script>
-    let photo = {{photo}}
-    let rotation = get_orientation(
-        photo
-    );
-</script>
 
 
+<input type="hidden" id="photoVar" name="photoVar" value="{{photoStr}}"/>
 
 <div class="single-post">
     <div class="container">
@@ -54,7 +48,7 @@
                         </div>
                         <!-- .meta-post -->
 
-                        <h1>{{photo.title}}</h1>
+                        <h1> {{photo.title}} </h1>
 
                         <span class="byline">by
                             <span class="author">
@@ -181,6 +175,14 @@
 </div>
 <!-- .single-post -->
 <script>
+
+    let photo = document.getElementById("photoVar").value;
+    photo = JSON.parse(photo);
+    console.log(photo);
+    let rotation = get_orientation(
+        photo
+    );
+
     var ru = (s) => {
         return s==undefined?'':s;
 
@@ -188,19 +190,29 @@
 
     try{
         document.getElementById("camera").innerHTML = photo.camera;
-    }catch(e){}
+    }catch(e){
+        console.error(e);
+    }
     try{
         document.getElementById("aperture").innerHTML = 'f' + photo.aperture;
-    }catch(e){}
+    }catch(e){
+        console.error(e);
+    }
     try{
         document.getElementById("ISO").innerHTML = photo.ISO;
-    }catch(e){}
+    }catch(e){
+        console.error(e);
+    }
     try{
         document.getElementById("exposure").innerHTML = photo.exposure;
-    }catch(e){}
+    }catch(e){
+        console.error(e);
+    }
     try{
         document.getElementById("software").innerHTML = photo.software;
-    }catch(e){}
+    }catch(e){
+        console.error(e);
+    }
 
     document.getElementById("image-content").classList.add(rotation);
     
