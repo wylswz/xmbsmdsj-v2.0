@@ -1,11 +1,12 @@
-FROM ubuntu:20.04
+FROM python:3
 
 WORKDIR /patent
-RUN apt update
-RUN apt install -y python3-pip 
 
-ADD ./requirements.txt /patent/requirements.txt
-RUN pip3 install -r requirements.txt
+ADD . /patent
+RUN pip3 install -r requirements.txt --proxy http:10.114.114.1:1091
+EXPOSE 80
+EXPOSE 443
 # Make port 80 available to the world outside this container
+RUN python manage.py collectstatic --no-input
 
 ENTRYPOINT [ "uwsgi", "-i", "/patent/config/uwsgi.ini" ]
