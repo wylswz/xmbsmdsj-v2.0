@@ -2,7 +2,7 @@ wheel
 Django==3.0
 django-autoslug==1.9.3
 django-cors-headers==3.7.0
-djangorestframework==3.11
+djangorestframework==3.11.2
 Pillow==8.1.2
 six==1.11.0
 uWSGI==2.0.15
