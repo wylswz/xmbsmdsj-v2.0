@@ -7,8 +7,7 @@ from PIL.TiffImagePlugin import IFDRational
 from PIL.Image import Image as ImageObj, Exif
 from pydantic import BaseModel, BaseConfig, Field
 from typing import List, TYPE_CHECKING
-
-from .utils import remove_bytes
+from common.templating import multiline_html_paragraph
 
 from patent.settings import MEDIA_ROOT, MEDIA_URL
 
@@ -117,6 +116,7 @@ class Photo(BaseModel):
                 'software': self.software,
                 'model': self.model,
                 'ISO': self.ISO,
+                'summary': multiline_html_paragraph(self.summary),
             }
         )
         print(d)

@@ -1,27 +1,10 @@
 from typing import TYPE_CHECKING
-import json
-import os
-import codecs
 from PIL import Image
 
 
 
 if TYPE_CHECKING:
     from typing import List
-
-
-
-def remove_bytes(dict1):
-    for k,v in dict1.items():
-        if isinstance(v, bytes):
-            try:
-                dict1[k] = ''
-            except:
-                dict1[k] = ''
-        elif isinstance(v, dict):
-            remove_bytes(v)
-        elif not isinstance(v, str):
-            dict1[k] = str(v)
 
 
 def image_compress(src_dir, tgt_dir):
