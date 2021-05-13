@@ -8,6 +8,6 @@ six==1.11.0
 uWSGI==2.0.15
 wcwidth==0.1.7
 wrapt==1.10.11
-pydantic==1.8.1
+pydantic==1.8.2
 
 jinja2==2.11.3
